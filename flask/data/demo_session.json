@@ -1,0 +1,78 @@
+{
+  "session_id": "DEMO-ANDROID-001",
+  "source": "synthetic_demo",
+  "device": {
+    "model": "Synthetic Android Device",
+    "android_version": "14",
+    "network": "Wi-Fi (synthetic)"
+  },
+  "location": "Demo environment",
+  "started_at": "2026-09-19T03:00:00+00:00",
+  "ended_at": "2026-09-19T03:11:30+00:00",
+  "test_results": [
+    {
+      "case_id": "HOME-01",
+      "status": "PASS",
+      "notes": "Synthetic example: home content rendered."
+    },
+    {
+      "case_id": "HOME-02",
+      "status": "PASS",
+      "notes": "Synthetic example: navigation labels were clear."
+    },
+    {
+      "case_id": "START-01",
+      "status": "PASS",
+      "notes": "Synthetic example: start flow opened."
+    },
+    {
+      "case_id": "START-02",
+      "status": "PASS",
+      "notes": "Synthetic example: state persisted on back navigation."
+    },
+    {
+      "case_id": "FAQ-01",
+      "status": "PASS",
+      "notes": "Synthetic example: FAQ items expanded."
+    },
+    {
+      "case_id": "FAQ-02",
+      "status": "FAIL",
+      "notes": "Synthetic example only: one help link points to a missing page."
+    },
+    {
+      "case_id": "SUPPORT-01",
+      "status": "PASS",
+      "notes": "Synthetic example: support choices were visible."
+    },
+    {
+      "case_id": "SUPPORT-02",
+      "status": "PASS",
+      "notes": "Synthetic example: email intent opened."
+    },
+    {
+      "case_id": "PERF-01",
+      "status": "PASS",
+      "notes": "Synthetic example: no blocking responsiveness issue."
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "DEMO-BUG-001",
+      "area": "FAQ / Help",
+      "category": "broken_link",
+      "title": "Synthetic help article link returns a missing-page response",
+      "severity": "S3",
+      "priority": "P2",
+      "reproducibility": "3/3 synthetic attempts",
+      "expected": "Help article opens successfully.",
+      "actual": "Synthetic example: destination reports missing page.",
+      "steps": [
+        "Open FAQs / Help.",
+        "Open the synthetic example article.",
+        "Tap the example learn-more link."
+      ],
+      "evidence_ref": "synthetic-evidence-not-client-data"
+    }
+  ]
+}

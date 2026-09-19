@@ -1,0 +1,10 @@
+case_id,area,title,steps,expected
+HOME-01,Home,Home screen loads,"Launch the app and wait for the home screen; inspect primary text, buttons, images and visible loading states.","Home content renders without crash, clipped critical content, indefinite spinner or obvious broken asset."
+HOME-02,Home,Primary navigation is understandable,"Review labels and tap the primary navigation controls available from Home.","Navigation labels are understandable and each enabled control opens the expected destination."
+START-01,Start application,Start flow can be entered,"From Home, tap the control that begins the application flow.","The first application step opens and clearly communicates what information/action is required."
+START-02,Start application,Back and forward navigation preserves state,"Enter non-sensitive sample input where permitted; move forward one step and return.","Navigation works without crash and previously entered state behaves consistently with the product design."
+FAQ-01,FAQ / Help,FAQ page opens and content is readable,"Open FAQs/Help; expand or open at least two help items.","Help content loads, text is readable, and expand/collapse or links respond correctly."
+FAQ-02,FAQ / Help,Help links are valid,"Tap each visible help link that is safe to open and return to the app.","Links open the intended destination without 404/error and returning to the app is possible."
+SUPPORT-01,Support / Contact,Support section opens,"Open the support/contact section and inspect all visible channels.","Support options are visible, understandable and not obviously incomplete or broken."
+SUPPORT-02,Support / Contact,Contact action resolves correctly,"Tap one non-destructive contact action such as email, web form or phone intent without sending a message.","The correct external handler or in-app contact form opens with sensible destination details."
+PERF-01,Cross-flow,No obvious responsiveness blocker,"Navigate Home → Start → Help → Support while observing input response and loading.","No repeatable freeze, crash, severe visual jank or loading delay that blocks the short test flow."

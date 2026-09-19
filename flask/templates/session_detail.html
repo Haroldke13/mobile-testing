@@ -1,0 +1,14 @@
+{%- extends "base.html" -%}
+{%- import "_macros.html" as render -%}
+{% block title %}Session Detail{% endblock %}
+{% block heading %}Session Detail{% endblock %}
+{% block body %}
+<div class="note"><b>Generated page</b>
+This template was not part of the model's answer — the route existed and the
+page did not. It renders exactly the values <code>session_detail.html</code> passes, so the
+routing and the data are the original work and only the presentation is added.</div>
+<h2>Cases By Id</h2>
+{{ render.show(cases_by_id) }}
+<h2>Session</h2>
+{{ render.show(session) }}
+{% endblock %}

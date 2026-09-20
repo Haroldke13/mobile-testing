@@ -1,14 +1,85 @@
 {%- extends "base.html" -%}
-{%- import "_macros.html" as render -%}
-{% block title %}New Session{% endblock %}
-{% block heading %}New Session{% endblock %}
+{% block title %}Record an observed session{% endblock %}
+{% block heading %}Record an observed session{% endblock %}
 {% block body %}
-<div class="note"><b>Generated page</b>
-This template was not part of the model's answer — the route existed and the
-page did not. It renders exactly the values <code>new_session.html</code> passes, so the
-routing and the data are the original work and only the presentation is added.</div>
-<h2>Submitted</h2>
-{{ render.show(submitted) }}
-<h2>Test Cases</h2>
-{{ render.show(test_cases) }}
+{# Replaces the generated placeholder. POST /sessions existed from the start
+   and no form ever posted to it, so the route was unreachable from the UI.
+   Field names here are the contract documented in qa/forms.py. #}
+<div class="note"><b>Synthetic data only</b>
+This is a practice build. Do not enter real client, tester or device details.</div>
+
+<form method="post" action="{{ url_for('create_session') }}">
+  <h2>Device and context</h2>
+  <p><label>Device model<br><input name="device_model" required
+     value="{{ submitted.get('device_model', '') if submitted else '' }}"></label></p>
+  <p><label>Android version<br><input name="android_version" required
+     value="{{ submitted.get('android_version', '') if submitted else '' }}"></label></p>
+  <p><label>Network<br><input name="network" required placeholder="Wi-Fi / 4G"
+     value="{{ submitted.get('network', '') if submitted else '' }}"></label></p>
+  <p><label>Location<br><input name="location" required
+     value="{{ submitted.get('location', '') if submitted else '' }}"></label></p>
+  <p><label>Started at<br><input type="datetime-local" name="started_at" required
+     value="{{ submitted.get('started_at', '') if submitted else '' }}"></label></p>
+  <p><label>Ended at<br><input type="datetime-local" name="ended_at" required
+     value="{{ submitted.get('ended_at', '') if submitted else '' }}"></label>
+     <small>An observed session must run at least 5 minutes.</small></p>
+
+  <h2>Test cases</h2>
+  {% if not test_cases %}
+    <p class="empty">No test cases are loaded — check data/test_cases.csv.</p>
+  {% endif %}
+  <table>
+    <tr><th>Case</th><th>Area</th><th>Expected</th><th>Status</th><th>Notes</th></tr>
+    {% for case in test_cases %}
+    <tr>
+      <td><code>{{ case.case_id }}</code><br>{{ case.title }}</td>
+      <td>{{ case.area }}</td>
+      <td>{{ case.expected }}</td>
+      <td>
+        <select name="status-{{ case.case_id }}">
+          {% for option in ['NOT_RUN', 'PASS', 'FAIL', 'BLOCKED'] %}
+          <option value="{{ option }}"
+            {{ 'selected' if submitted and submitted.get('status-' ~ case.case_id) == option else '' }}>
+            {{ option }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td><textarea name="notes-{{ case.case_id }}" rows="2" cols="30">{{ submitted.get('notes-' ~ case.case_id, '') if submitted else '' }}</textarea>
+        <br><small>Required for FAIL and BLOCKED.</small></td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Issues</h2>
+  <p><small>Leave a block empty if unused. A FAIL needs at least one issue.</small></p>
+  {% for n in range(1, issue_blocks + 1) %}
+  <fieldset>
+    <legend>Issue {{ n }}</legend>
+    <p><label>Title<br><input name="issue-{{ n }}-title" size="60"></label></p>
+    <p><label>Area<br><input name="issue-{{ n }}-area"></label></p>
+    <p><label>Category<br>
+      <select name="issue-{{ n }}-category">
+        <option value=""></option>
+        {% for c in ['functional','usability','broken_link','performance','content','other'] %}
+        <option value="{{ c }}">{{ c }}</option>{% endfor %}
+      </select></label></p>
+    <p><label>Severity<br>
+      <select name="issue-{{ n }}-severity"><option value=""></option>
+      {% for s in ['S1','S2','S3','S4'] %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+      </select></label>
+       <label>Priority
+      <select name="issue-{{ n }}-priority"><option value=""></option>
+      {% for p in ['P0','P1','P2','P3'] %}<option value="{{ p }}">{{ p }}</option>{% endfor %}
+      </select></label></p>
+    <p><label>Reproducibility<br><input name="issue-{{ n }}-reproducibility"
+       placeholder="3/3 attempts"></label></p>
+    <p><label>Expected<br><textarea name="issue-{{ n }}-expected" rows="2" cols="60"></textarea></label></p>
+    <p><label>Actual<br><textarea name="issue-{{ n }}-actual" rows="2" cols="60"></textarea></label></p>
+    <p><label>Steps, one per line<br><textarea name="issue-{{ n }}-steps" rows="3" cols="60"></textarea></label></p>
+    <p><label>Evidence reference<br><input name="issue-{{ n }}-evidence_ref"></label></p>
+  </fieldset>
+  {% endfor %}
+
+  <p><button type="submit">Save session</button></p>
+</form>
 {% endblock %}

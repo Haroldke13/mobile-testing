@@ -6,7 +6,7 @@ from pathlib import Path
 from flask import Flask, Response, abort, flash, redirect, render_template, request, url_for
 
 from qa.config import DEMO_FILE, TEST_CASE_FILE, env_bool, session_file
-from qa.forms import session_from_form
+from qa.forms import ISSUE_BLOCKS, session_from_form
 from qa.reporting import build_summary, render_issue_csv, render_markdown_report, render_short_feedback, session_duration_minutes
 from qa.storage import append_jsonl, find_session, load_json, load_jsonl
 from qa.testcases import load_test_cases, case_id_set
@@ -39,7 +39,8 @@ def create_app(session_path: Path | None = None, include_demo: bool | None = Non
 
     @app.get("/sessions/new")
     def new_session():
-        return render_template("new_session.html", test_cases=test_cases)
+        return render_template("new_session.html", test_cases=test_cases,
+                               issue_blocks=ISSUE_BLOCKS)
 
     @app.post("/sessions")
     def create_session():
@@ -48,7 +49,9 @@ def create_app(session_path: Path | None = None, include_demo: bool | None = Non
             validate_session(session, case_ids)
         except SessionValidationError as exc:
             flash(str(exc), "error")
-            return render_template("new_session.html", test_cases=test_cases, submitted=request.form), 400
+            return render_template("new_session.html", test_cases=test_cases,
+                                   submitted=request.form,
+                                   issue_blocks=ISSUE_BLOCKS), 400
         append_jsonl(store_path, session)
         flash("Observed session saved.", "success")
         return redirect(url_for("session_detail", session_id=session["session_id"]))
